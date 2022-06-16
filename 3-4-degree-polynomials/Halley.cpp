@@ -2,6 +2,8 @@
 #include"polynomials.h"
 #include <vector>
 #include <iostream>
+#include <random>
+#include <chrono>
 using namespace std;
 
 inline float sq(const float& x) { //Функция sq принимает  float число, служит для быстрого вычисления квадрата числа
@@ -29,6 +31,7 @@ inline int eqn_quadratic(const float a, const float b, float*& x) {//Функц�
         d = sqrt(d);
         x[1] = p - d;
         x[2] = p + d;
+        return 2;
     }
     return 0;//Если корни комплексные возвращаем 0
 }
@@ -57,7 +60,7 @@ inline int eqn_quadratic(const float a, const float b, const float c, const floa
 int eqn_cubic(const float a, const float b, const float e, float*& x) { // Remark #2
     int i_slope, i_loc;
     float w, xh, y, y1, y2, dx, c[2], d;
-    float  prec = 1.0e-6f; // termination criterion, Remark #3
+    float  prec = 1.0e-4f; // termination criterion, Remark #3
  
     w = (float)1.0f;
     if (e == 0.0) { // Отсутствует ли свободный член
@@ -125,7 +128,5 @@ vector<T> eqn_cubic(third_degree_polynomial<T> P)
     }
     return solution1;
 }
-
-
 
 
