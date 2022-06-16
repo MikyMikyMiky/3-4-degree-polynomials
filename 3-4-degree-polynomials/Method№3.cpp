@@ -4,18 +4,17 @@
 #include <corecrt_math_defines.h>
 #include <complex>
 #include "polynomials.h"
+#include <random>
+#include <chrono>
 using namespace std;
 
-const float one_third = 1.0f / 3.0f;
 
 
-inline float sq(const float& x) { //Функция sq принимает  вещественное число, служит для быстрого вычисления квадрата числа
-    return x * x;
-}
+
 
 inline void eqn_quadratic(const float a, const float b, vector<complex<float>>& x) {//Функция для нахождения любых корней квадратного урванения, принимает вектор x, в него заносятся ответы, и 2 числа float, a это коэфициент при x, а b это свободный член
     float p = -0.5f * a,
-        d = sq(p) - b;//Вычисление дискриминанта
+        d = p*p - b;//Вычисление дискриминанта
     if (d >= 0.0) {//Вычисление вещественных корней
         d = sqrt(d);
         x[1] = p - d;
@@ -39,6 +38,7 @@ inline void gornor(float b,  float c, vector<complex<float>>& solution)//Фун�
 
 void algorith(const float a, const float b, const float c,  vector<complex<float>>& solution)//Функция, находящая корни уравнения третьей степени,принимает вектор solution, в него заносятся ответы, и 3 числа float,a это коэфициент при x^2, b это коэфициент при x, а c это свободный член
 {
+    const float one_third = 1.0f / 3.0f;
     float e = a * one_third;
     float f = b - a * e;//Переменная f оперделяет сколько будет вещественных корней и формулу их выисления 
     float g = e * (b - 2 * e * e) - c;
@@ -90,22 +90,28 @@ void algorith(const float a, const float b, const float c,  vector<complex<float
 }
 
 template<typename T>
-vector<T> algorithW(third_degree_polynomial<T> P)
+vector<T> algorith(third_degree_polynomial<T> P)
 {
     vector<float> coefs = P.get_coefs();
-    vector<complex<float>> solution;
+    vector<complex<float>> solution (3);
     algorith( coefs[2], coefs[1], coefs[0], solution);
-    if (T == complex<float>)
-        return solution;
-    else
+    vector<T> solution1;
+    for (int i = 0; i < 3; i++)
     {
-        vector<T> solution1;
-        for (int i = 0; i < 3; i++)
-        {
-            solution1.push_back(real(solution[i]));
-        }
-        return solution1;
+        solution1.push_back(real(solution[i]));
     }
+    return solution1;
+ 
+}
+
+template<typename T>
+vector<complex<T>> algorith(third_degree_polynomial<complex<T>> P)
+{
+    vector<float> coefs = P.get_coefs();
+    vector<complex<float>> solution(3);
+    algorith(coefs[2], coefs[1], coefs[0], solution);
+    return solution;
+
 }
 
 
